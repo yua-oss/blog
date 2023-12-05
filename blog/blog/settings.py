@@ -189,3 +189,8 @@ LOGGING = {
         },
     }
 }
+# 2.2替换系统的user 来使用我们自己定义的user
+# 2.2配置信息 为子应用名.模型类型
+AUTH_USER_MODEL = 'users.User'
+# 2.2进入终端输入 python manage.py makemigrations
+# 2.2查询数据库之后 python manage.py migrate#
