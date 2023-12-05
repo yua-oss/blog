@@ -21,6 +21,9 @@ import re
 from users.models import User
 from django.db import DatabaseError
 
+# 2.6展示首页
+from django.shortcuts import redirect
+from django.urls import reverse
 
 # 注册视图
 class RegisterView(View):
@@ -33,6 +36,7 @@ class RegisterView(View):
         :return: 注册界面
         """
         return render(request, 'register.html')
+
     # 2.5 注册功能实现
     def post(self, request):
         # 接收参数
@@ -69,7 +73,8 @@ class RegisterView(View):
             return HttpResponseBadRequest('注册失败')
 
         # 响应注册结果
-        return HttpResponse('注册成功，重定向到首页')
+        # return HttpResponse('注册成功，重定向到首页')
+        return redirect(reverse('home:index'))
 
 
 # 2.3 图片验证码
