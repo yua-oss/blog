@@ -7,6 +7,8 @@ from users.views import ImageCodeView
 from users.views import SmsCodeView
 # 3.1手机号登录
 from users.views import LoginView
+# 3.3退出登录
+from users.views import LogoutView
 
 # 进行users 子应用的视图路由
 urlpatterns = [
@@ -24,6 +26,10 @@ urlpatterns = [
     # 短信发送
     path('smscode/', SmsCodeView.as_view(), name='smscode'),
 
-    # 登录路由
+    # 3.1登录路由
     path('login/', LoginView.as_view(), name='login'),
+
+    # 3.3退出登录
+    path('logout/', LogoutView.as_view(), name='logout'),
+
 ]
