@@ -9,6 +9,10 @@ from users.views import SmsCodeView
 from users.views import LoginView
 # 3.3退出登录
 from users.views import LogoutView
+# 4.1 忘记密码
+from users.views import ForgetPasswordView
+# 5.1用户中心
+from users.views import UserCenterView
 
 # 进行users 子应用的视图路由
 urlpatterns = [
@@ -26,10 +30,15 @@ urlpatterns = [
     # 短信发送
     path('smscode/', SmsCodeView.as_view(), name='smscode'),
 
-    # 3.1登录路由
+    # 3.1 登录路由
     path('login/', LoginView.as_view(), name='login'),
 
-    # 3.3退出登录
+    # 3.3 退出登录
     path('logout/', LogoutView.as_view(), name='logout'),
 
+    # 4.1 忘记密码
+    path('forgetpassword/', ForgetPasswordView.as_view(), name='forgetpassword'),
+
+    # 5.1用户中心
+    path('center/', UserCenterView.as_view(), name='center'),
 ]

@@ -194,3 +194,13 @@ LOGGING = {
 AUTH_USER_MODEL = 'users.User'
 # 2.2进入终端输入 python manage.py makemigrations
 # 2.2查询数据库之后 python manage.py migrate#
+
+# 5.1.2 用户中心-是否登录
+# 修改系统的未登录跳转链接
+LOGIN_URL = '/login/'
+
+# 5.1.2 用户中心-信息修改
+# 设置图片上传的路径并新建文件夹media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# 设置图片的统一url都以media开头
+MEDIA_URL = '/media/'
