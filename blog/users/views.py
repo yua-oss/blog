@@ -330,3 +330,10 @@ class UserCenterView(LoginRequiredMixin, View):
         # 更新cookie信息
         response.set_cookie('username', user.username, max_age=30 * 24 * 3600)
         return response
+
+
+# 6.1 写博客-页面展示
+class WriteBlogView(LoginRequiredMixin, View):
+    # 6.1 写博客-页面展示
+    def get(self, request):
+        return render(request, 'write_blog.html')

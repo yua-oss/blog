@@ -13,6 +13,8 @@ from users.views import LogoutView
 from users.views import ForgetPasswordView
 # 5.1用户中心
 from users.views import UserCenterView
+# 6.1 写博客
+from users.views import WriteBlogView
 
 # 进行users 子应用的视图路由
 urlpatterns = [
@@ -39,6 +41,9 @@ urlpatterns = [
     # 4.1 忘记密码
     path('forgetpassword/', ForgetPasswordView.as_view(), name='forgetpassword'),
 
-    # 5.1用户中心
+    # 5.1 用户中心
     path('center/', UserCenterView.as_view(), name='center'),
+
+    # 6.1 写博客
+    path('writeblog/', WriteBlogView.as_view(), name='writeblog'),
 ]
