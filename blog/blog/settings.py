@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 注册用户模块应用
     'users.apps.UsersConfig',
+    # 6.2 写博客-定义模型
+    'home.apps.HomeConfig',
 ]
 
 MIDDLEWARE = [
