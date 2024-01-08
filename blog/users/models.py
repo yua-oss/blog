@@ -22,9 +22,9 @@ class User(AbstractUser):
     # 3.1手机号登录
     # 修改认证的字段
     USERNAME_FIELD = 'mobile'
-    #
-    # #创建超级管理员的需要必须输入的字段
-    # REQUIRED_FIELDS = ['username','email']
+    # 6.3 写博客-后台管理
+    # 创建超级管理员的需要必须输入的字段
+    REQUIRED_FIELDS = ['username', 'email']
 
     # 内部类 class Meta 用于给 model 定义元数据
     class Meta:
