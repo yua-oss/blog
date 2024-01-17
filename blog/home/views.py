@@ -78,6 +78,12 @@ class IndexView(View):
         return render(request, 'index.html', context=context)
 
 
+# 8.5发表评论
+from home.models import Comment, Article
+from django.urls import reverse
+from django.shortcuts import redirect
+
+
 # 8.1 详情视图
 class DetailView(View):
     # 8.1详情视图
@@ -92,11 +98,69 @@ class DetailView(View):
         try:
             article = Article.objects.get(id=id)
         except Article.DoesNotExist:
+            # 8.2 404界面
             return render(request, '404.html')
-
+        # 8.3 推荐文章
+        else:
+            article.total_views += 1
+            article.save()
+        # 获取热点数据
+        hot_articles = Article.objects.order_by('-total_views')[:9]
+        # 8.3 推荐文章
+        # 8.6 评论显示
+        page_size = request.GET.get('page_size', 10)
+        page_num = request.GET.get('page_num', 1)
+        comments = Comment.objects.filter(article=article).order_by('-created')
+        total_count = comments.count()
+        from django.core.paginator import Paginator, EmptyPage
+        paginator = Paginator(comments, page_size)
+        try:
+            page_comments = paginator.page(page_num)
+        except EmptyPage:
+            return HttpResponseNotFound('empty page')
+        # 总页数
+        total_page = paginator.num_pages
         context = {
             'categories': categories,
             'category': article.category,
             'article': article,
+            'hot_articles': hot_articles,  # 8.3推荐文章
+            # <editor-fold desc="8.6 评论展示">
+            'total_count': total_count,
+            'comments': page_comments,
+            'page_size': page_size,
+            'total_page': total_page,
+            'page_num': page_num,
+            # </editor-fold>
         }
         return render(request, 'detail.html', context=context)
+
+    # 8.5 发表评论
+    def post(self, request):
+        user = request.user
+        if user and user.is_authenticated:
+            # 接收数据
+            id = request.POST.get('id')
+            content = request.POST.get('content')
+
+            # 判断文章是否存在
+            try:
+                article = Article.objects.get(id=id)
+            except Article.DoesNotExist:
+                return HttpResponseNotFound('没有此文章')
+
+            # 保存到数据
+            Comment.objects.create(
+                content=content,
+                article=article,
+                user=user
+            )
+            # 修改文章评论数量
+            article.comments_count += 1
+            article.save()
+            # 拼接跳转路由
+            path = reverse('home:detail') + '?id={}'.format(article.id)
+            return redirect(path)
+        else:
+            # 没有登录则跳转到登录页面
+            return redirect(reverse('users:login'))

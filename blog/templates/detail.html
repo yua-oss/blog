@@ -85,8 +85,8 @@
                     <div>浏览：{{ article.total_views }}</div>
                 </div>
                 <!-- 文章正文 -->
-{#                safe是Django模板语言中的一个过滤器，用于将模板变量中的HTML代码输出而不进行转义。在模板中，我们可以使用safe过滤器来确保输出不会被Django模板引擎进行转义，从而保持HTML代码的原始格式。#}
-{#在这个例子中，我们使用{{ article.content|safe }}来输出文章的正文内容。由于正文内容可能包含HTML代码，所以我们使用safe过滤器来避免被转义。#}
+                {#                safe是Django模板语言中的一个过滤器，用于将模板变量中的HTML代码输出而不进行转义。在模板中，我们可以使用safe过滤器来确保输出不会被Django模板引擎进行转义，从而保持HTML代码的原始格式。#}
+                {#在这个例子中，我们使用{{ article.content|safe }}来输出文章的正文内容。由于正文内容可能包含HTML代码，所以我们使用safe过滤器来避免被转义。#}
                 <div class="col-12" style="word-break: break-all;word-wrap: break-word;">
                     <p>
                     <p>{{ article.content|safe }}</p></p>
@@ -100,6 +100,8 @@
                 <br>
                 <div>
                     <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ article.id }}">
                         <div class="form-group"><label for="body"><strong>我也要发言：</strong></label>
                             <div>
 
@@ -108,7 +110,6 @@
                             <textarea cols="40" id="id_body" name="content" rows="10" required data-processed="0"
                                       :data-config="data_config" data-external-plugin-resources="[]" data-id="id_body"
                                       data-type="ckeditortype">
-
                             </textarea>
                                 </div>
                             </div>
@@ -119,58 +120,20 @@
                 </div>
                 <br>
                 <!-- 显示评论 -->
-                <h4>共有5条评论</h4>
+                <h4>共有{{ total_count }}条评论</h4>
                 <div class="row">
-                    <div class="col-12">
-                        <hr>
-                        <p><strong style="color: pink"></strong></p>
-                        <div>
-                            <div><span><strong>老王</strong></span>&nbsp;<span
-                                    style="color: gray">2019-05-18 14:54</span></div>
-                            <br>
-                            <p>学习了</p>
+                    {% for comment in comments %}
+                        <div class="col-12">
+                            <hr>
+                            <p><strong style="color: pink"></strong></p>
+                            <div>
+                                <div><span><strong>{{ comments.user.username }}</strong></span>&nbsp;<span
+                                        style="color: gray">{{ comments.created|date:'Y-m-d H:i' }}</span></div>
+                                <br>
+                                <p>{{ comments.content|safe }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                        <p><strong style="color: pink"></strong></p>
-                        <div>
-                            <div><span><strong>老王</strong></span>&nbsp;<span
-                                    style="color: gray">2019-05-18 14:54</span></div>
-                            <br>
-                            <p>学习了</p>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                        <p><strong style="color: pink"></strong></p>
-                        <div>
-                            <div><span><strong>老王</strong></span>&nbsp;<span
-                                    style="color: gray">2019-05-18 14:54</span></div>
-                            <br>
-                            <p>学习了</p>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                        <p><strong style="color: pink"></strong></p>
-                        <div>
-                            <div><span><strong>老王</strong></span>&nbsp;<span
-                                    style="color: gray">2019-05-18 14:54</span></div>
-                            <br>
-                            <p>学习了</p>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                        <p><strong style="color: pink"></strong></p>
-                        <div>
-                            <div><span><strong>老王</strong></span>&nbsp;<span
-                                    style="color: gray">2019-05-18 14:54</span></div>
-                            <br>
-                            <p>学习了</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                     <div class="pagenation" style="text-align: center">
                         <div id="pagination" class="page"></div>
                     </div>
@@ -182,11 +145,10 @@
                 <div class="sidebar__inner">
                     <h4><strong>推荐</strong></h4>
                     <hr>
-                    <a href="#" style="color: black">如何更好的学习Django呢？</a><br>
-                    <a href="#" style="color: black">如何更好的学习Django呢？</a><br>
-                    <a href="#" style="color: black">如何更好的学习Django呢？</a><br>
-                    <a href="#" style="color: black">如何更好的学习Django呢？</a><br>
-                    <a href="#" style="color: black">如何更好的学习Django呢？</a><br>
+                    {% for hot_article in hot_articles %}
+                        <a href="{% url 'home:detail' %}?id={{ hot_article.id }}"
+                           style="color: black">{{ hot_article.title }}</a><br>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -213,11 +175,11 @@
 <script type="text/javascript">
     $(function () {
         $('#pagination').pagination({
-            currentPage: 15,
-            totalPage: 30,
+            currentPage: {{page_num}},
+            totalPage: {{ total_page }},
             callback: function (current) {
 
-                location.href = '/';
+                location.href = '/datail/?id={{ category.id }}&page_size={{page_size}}&page_num=' + current;
             }
         })
     });
