@@ -127,10 +127,10 @@
                             <hr>
                             <p><strong style="color: pink"></strong></p>
                             <div>
-                                <div><span><strong>{{ comments.user.username }}</strong></span>&nbsp;<span
-                                        style="color: gray">{{ comments.created|date:'Y-m-d H:i' }}</span></div>
+                                <div><span><strong>{{ comment.user.username }}</strong></span>&nbsp;<span
+                                        style="color: gray">{{ comment.created|date:'Y-m-d H:i' }}</span></div>
                                 <br>
-                                <p>{{ comments.content|safe }}</p>
+                                <p>{{ comment.content|safe }}</p>
                             </div>
                         </div>
                     {% endfor %}
@@ -175,11 +175,11 @@
 <script type="text/javascript">
     $(function () {
         $('#pagination').pagination({
-            currentPage: {{page_num}},
+            currentPage: {{ page_num }},
             totalPage: {{ total_page }},
             callback: function (current) {
 
-                location.href = '/datail/?id={{ category.id }}&page_size={{page_size}}&page_num=' + current;
+                location.href = '/detail/?id={{ category.id }}&page_size={{ page_size }}&page_num=' + current;
             }
         })
     });
